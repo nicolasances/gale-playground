@@ -8,3 +8,15 @@ const api = new TotoAPIController(new ControllerConfig({ apiName: "gale-playgrou
 api.init().then(() => {
     api.listen()
 });
+
+const shutdown = async () => {
+
+    console.log('Shutting down gracefully...');
+    
+    await ControllerConfig.closeMongoClient();
+    
+    process.exit(0);
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
