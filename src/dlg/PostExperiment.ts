@@ -15,6 +15,8 @@ export class PostExperiment implements TotoDelegate {
         const mongoClient = await config.getMongoClient();
         const db = mongoClient.db(config.getDBName());
 
+        console.log(JSON.stringify(req.body, null, 2));
+
         // 2. Insert the experiment document
         const experiment = GalePlaygroundExperiment.fromHTTPBody(req.body);
 
