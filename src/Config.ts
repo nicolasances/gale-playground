@@ -1,9 +1,9 @@
 import { MongoClient } from 'mongodb';
 import { TotoControllerConfig, ValidatorProps, Logger, SecretsManager } from "toto-api-controller";
 
-const dbName = 'mydb';
+const dbName = 'galeplayground';
 const collections = {
-    coll1: 'coll1',
+    prompts: 'prompts',
 };
 
 export class ControllerConfig extends TotoControllerConfig {
@@ -13,13 +13,14 @@ export class ControllerConfig extends TotoControllerConfig {
 
     async load(): Promise<any> {
 
+        const sm = new SecretsManager(this.hyperscaler == 'local' ? 'aws' : this.hyperscaler, this.env, this.logger!);
+
         let promises = [];
 
         promises.push(super.load());
 
-        // Other possible secrets to load:
-        // mongo-user
-        // mongo-pswd
+        promises.push(sm.getSecret("gale-playground-mongo-user").then(user => {this.mongoUser = user}));
+        promises.push(sm.getSecret("gale-playground-mongo-pswd").then(pwd => {this.mongoPwd = pwd}));
         
         await Promise.all(promises);
 
@@ -31,7 +32,7 @@ export class ControllerConfig extends TotoControllerConfig {
 
     async getMongoClient() {
 
-        const mongoUrl = `mongodb://${this.mongoUser}:${this.mongoPwd}@${this.mongoHost}:27017`
+        const mongoUrl = `mongodb://${this.mongoUser}:${this.mongoPwd}@${this.mongoHost}:27017/${dbName}`;
 
         return await new MongoClient(mongoUrl).connect();
     }

@@ -1,10 +1,10 @@
 {
-  "name": "toto-node-template",
+  "name": "gale-playground",
   "version": "1.0.0",
-  "description": "Template for Toto NodeJS Microservices",
+  "description": "Gale Playground microservice",
   "main": "index.js",
   "scripts": {
-    "start:dev": "npx nodemon",
+    "dev": "npx nodemon",
     "build": "rm -rf ./build && tsc",
     "start": "node build/index.js"
   },
