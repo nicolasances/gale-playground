@@ -36,7 +36,7 @@ export class PlaygroundStore {
 
         const collection = this.db.collection(this.config.getCollections().experiments);
 
-        const docs = await collection.find({ agentId }).toArray();
+        const docs = await collection.find({ agentId }).sort({ date: -1 }).toArray();
 
         return docs.map(doc => GalePlaygroundExperiment.fromBSON(doc));
     }
